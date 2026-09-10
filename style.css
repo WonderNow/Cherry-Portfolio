@@ -246,7 +246,7 @@ h1 {
 	border-bottom: 2px solid #fff;
 	transform: rotate(45deg);
 	margin: -8px;
-	animation: animate 2.5s infinite;
+    animation: animate 4s infinite;
 }
 
 .scroll-box span:nth-child(2) {
@@ -261,11 +261,11 @@ h1 {
 	0% {
 		opacity: 0;
 	}
-	50% {
+    31.25% {
 		opacity: 0.9;
 		transform: rotate(45deg) translate(10px, 10px);
 	}
-	100% {
+    62.5%, 100% {
 		opacity: 0;
         transform: rotate(45deg) translate(10px, 10px);
 	}
@@ -300,19 +300,11 @@ h2 {
 
 .appear {
     opacity: 0;
-    transform: translateY(-20px);
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    transition: opacity 0.3s ease-out;
 }
   
-.appear-active {
+.gallery-ready .appear-active {
     opacity: 1;
-    transform: translateY(0);
-}
-  
-.appear:not(.appear-active) {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 }
 
 .galerie {

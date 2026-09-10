@@ -13,10 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const observer = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('appear-active');
-        observer.unobserve(entry.target);
-      }
+      entry.target.classList.toggle('appear-active', entry.isIntersecting);
     });
   }, {
     rootMargin: '0px 0px -100px 0px'
@@ -29,16 +26,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 //********
-// Désactive le scrolling pendant 3 secondes au load
+// Prépare la galerie avant d'autoriser le défilement
 //********
 window.addEventListener('load', function() {
   // Ajoute la classe 'no-scroll' au body
   document.body.classList.add('no-scroll');
-  
-  // Retire la classe 'no-scroll' après 3 secondes
-  setTimeout(function() {
-      document.body.classList.remove('no-scroll');
-  }, 3000); // 3000 ms = 3 secondes
+
+  const images = Array.from(document.querySelectorAll('.galerie img'));
+  const minimumLoaderDuration = new Promise(function(resolve) {
+    setTimeout(resolve, 3000);
+  });
+  const imagesDecoded = Promise.all(images.map(function(image) {
+    if (typeof image.decode !== 'function') {
+      return Promise.resolve();
+    }
+
+    return image.decode().catch(function() {
+      // Une image indisponible ne doit pas bloquer la page.
+    });
+  }));
+
+  Promise.all([minimumLoaderDuration, imagesDecoded]).then(function() {
+    document.body.classList.add('gallery-ready');
+    document.body.classList.remove('no-scroll');
+  });
 });
 
 
