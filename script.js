@@ -1,17 +1,30 @@
 //********
-//Apparition des éléments au scroll
+// Apparition des éléments au défilement
 //********
-window.addEventListener('scroll', function() {
-    let elements = document.querySelectorAll('.appear');
-    for (let i = 0; i < elements.length; i++) {
-    let element = elements[i];
-    let distanceFromTop = element.getBoundingClientRect().top;
-    if (distanceFromTop - window.innerHeight + 100 < 0) {
-        element.classList.add('appear-active');
-    } else {
-        element.classList.remove('appear-active');
-    }
-    }
+document.addEventListener('DOMContentLoaded', function() {
+  const elements = document.querySelectorAll('.appear');
+
+  if (!('IntersectionObserver' in window)) {
+    elements.forEach(function(element) {
+      element.classList.add('appear-active');
+    });
+    return;
+  }
+
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('appear-active');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    rootMargin: '0px 0px -100px 0px'
+  });
+
+  elements.forEach(function(element) {
+    observer.observe(element);
+  });
 });
 
 
